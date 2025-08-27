@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Siswa - SIAKAD{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-user-plus me-2"></i>Tambah Siswa Baru
+                </h1>
+                <a href="{{ url_for('students') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h6 class="m-0">
+                        <i class="fas fa-form me-2"></i>Form Data Siswa
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="addStudentForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nisn" class="form-label">
+                                        <i class="fas fa-id-card me-2"></i>NISN *
+                                    </label>
+                                    <input type="text" class="form-control" id="nisn" name="nisn" required maxlength="20">
+                                    <div class="form-text">Nomor Induk Siswa Nasional (10 digit)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">
+                                        <i class="fas fa-user me-2"></i>Nama Lengkap *
+                                    </label>
+                                    <input type="text" class="form-control" id="name" name="name" required maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-2"></i>Email *
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone me-2"></i>Nomor Telepon
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" maxlength="20">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">
+                                        <i class="fas fa-venus-mars me-2"></i>Jenis Kelamin *
+                                    </label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Pilih Jenis Kelamin</option>
+                                        <option value="Laki-laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="birth_date" class="form-label">
+                                        <i class="fas fa-calendar me-2"></i>Tanggal Lahir
+                                    </label>
+                                    <input type="date" class="form-control" id="birth_date" name="birth_date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap
+                                    </label>
+                                    <textarea class="form-control" id="address" name="address" rows="3" placeholder="Masukkan alamat lengkap siswa..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="class_id" class="form-label">
+                                        <i class="fas fa-users me-2"></i>Kelas
+                                    </label>
+                                    <select class="form-select" id="class_id" name="class_id">
+                                        <option value="">Pilih Kelas (Opsional)</option>
+                                        <option value="1">X-A</option>
+                                        <option value="2">X-B</option>
+                                        <option value="3">XI-A</option>
+                                        <option value="4">XI-B</option>
+                                        <option value="5">XII-A</option>
+                                        <option value="6">XII-B</option>
+                                    </select>
+                                    <div class="form-text">Kelas dapat diatur nanti jika belum ditentukan</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-info-circle me-2"></i>Status
+                                    </label>
+                                    <div class="form-control-plaintext">
+                                        <span class="badge bg-success">Aktif</span>
+                                        <small class="text-muted ms-2">Siswa akan aktif setelah pendaftaran</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fas fa-undo me-2"></i>Reset Form
+                            </button>
+                            <div>
+                                <a href="{{ url_for('students') }}" class="btn btn-outline-secondary me-2">
+                                    <i class="fas fa-times me-2"></i>Batal
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Simpan Data
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Card -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card" id="previewCard" style="display: none;">
+                <div class="card-header bg-info text-white">
+                    <h6 class="m-0">
+                        <i class="fas fa-eye me-2"></i>Preview Data Siswa
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="avatar-xl bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="150"><strong>NISN:</strong></td>
+                                    <td id="preview-nisn">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nama:</strong></td>
+                                    <td id="preview-name">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td id="preview-email">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Telepon:</strong></td>
+                                    <td id="preview-phone">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jenis Kelamin:</strong></td>
+                                    <td id="preview-gender">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Alamat:</strong></td>
+                                    <td id="preview-address">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Form validation and preview
+    const form = document.getElementById('addStudentForm');
+    const previewCard = document.getElementById('previewCard');
+    
+    // Real-time preview
+    form.addEventListener('input', updatePreview);
+    
+    function updatePreview() {
+        const formData = new FormData(form);
+        const hasData = formData.get('nisn') || formData.get('name') || formData.get('email');
+        
+        if (hasData) {
+            previewCard.style.display = 'block';
+            document.getElementById('preview-nisn').textContent = formData.get('nisn') || '-';
+            document.getElementById('preview-name').textContent = formData.get('name') || '-';
+            document.getElementById('preview-email').textContent = formData.get('email') || '-';
+            document.getElementById('preview-phone').textContent = formData.get('phone') || '-';
+            document.getElementById('preview-gender').textContent = formData.get('gender') || '-';
+            document.getElementById('preview-address').textContent = formData.get('address') || '-';
+        } else {
+            previewCard.style.display = 'none';
+        }
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const nisn = document.getElementById('nisn').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const gender = document.getElementById('gender').value;
+        
+        if (!nisn || !name || !email || !gender) {
+            showAlert('Mohon lengkapi semua field yang wajib diisi!', 'danger');
+            return;
+        }
+        
+        // Validate NISN format
+        if (!/^\d{10}$/.test(nisn)) {
+            showAlert('NISN harus berupa 10 digit angka!', 'danger');
+            return;
+        }
+        
+        // Show loading
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+        submitBtn.disabled = true;
+        
+        // Submit form
+        setTimeout(() => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            // Show success message and redirect
+            showAlert('Data siswa berhasil disimpan!', 'success');
+            setTimeout(() => {
+                window.location.href = "{{ url_for('students') }}";
+            }, 1500);
+        }, 2000);
+    });
+
+    function resetForm() {
+        if (confirm('Apakah Anda yakin ingin mengosongkan form?')) {
+            form.reset();
+            previewCard.style.display = 'none';
+        }
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.container');
+        container.insertBefore(alertDiv, container.firstChild);
+        
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Auto format NISN input
+    document.getElementById('nisn').addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    });
+
+    // Auto format phone input
+    document.getElementById('phone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 15);
+    });
+</script>
+
+<style>
+    .avatar-xl {
+        width: 5rem;
+        height: 5rem;
+        font-size: 2rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .required::after {
+        content: " *";
+        color: #dc3545;
+    }
+</style>
+{% endblock %}

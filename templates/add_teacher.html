@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Guru - SIAKAD{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-user-tie me-2"></i>Tambah Guru Baru
+                </h1>
+                <a href="{{ url_for('teachers') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h6 class="m-0">
+                        <i class="fas fa-form me-2"></i>Form Data Guru
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="addTeacherForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nip" class="form-label">
+                                        <i class="fas fa-id-badge me-2"></i>NIP *
+                                    </label>
+                                    <input type="text" class="form-control" id="nip" name="nip" required maxlength="20">
+                                    <div class="form-text">Nomor Induk Pegawai (18 digit)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">
+                                        <i class="fas fa-user me-2"></i>Nama Lengkap *
+                                    </label>
+                                    <input type="text" class="form-control" id="name" name="name" required maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-2"></i>Email *
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone me-2"></i>Nomor Telepon
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" maxlength="20">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">
+                                        <i class="fas fa-book me-2"></i>Mata Pelajaran *
+                                    </label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Pilih Mata Pelajaran</option>
+                                        <option value="Matematika">Matematika</option>
+                                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                        <option value="Fisika">Fisika</option>
+                                        <option value="Kimia">Kimia</option>
+                                        <option value="Biologi">Biologi</option>
+                                        <option value="Sejarah">Sejarah</option>
+                                        <option value="Geografi">Geografi</option>
+                                        <option value="Ekonomi">Ekonomi</option>
+                                        <option value="Sosiologi">Sosiologi</option>
+                                        <option value="Seni Budaya">Seni Budaya</option>
+                                        <option value="Pendidikan Jasmani">Pendidikan Jasmani</option>
+                                        <option value="Pendidikan Agama">Pendidikan Agama</option>
+                                        <option value="Teknologi Informasi">Teknologi Informasi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="qualification" class="form-label">
+                                        <i class="fas fa-graduation-cap me-2"></i>Kualifikasi Pendidikan
+                                    </label>
+                                    <select class="form-select" id="qualification" name="qualification">
+                                        <option value="">Pilih Kualifikasi</option>
+                                        <option value="S1">S1 (Sarjana)</option>
+                                        <option value="S2">S2 (Magister)</option>
+                                        <option value="S3">S3 (Doktor)</option>
+                                        <option value="Diploma">Diploma</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap
+                                    </label>
+                                    <textarea class="form-control" id="address" name="address" rows="3" placeholder="Masukkan alamat lengkap guru..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="join_date" class="form-label">
+                                        <i class="fas fa-calendar me-2"></i>Tanggal Bergabung
+                                    </label>
+                                    <input type="date" class="form-control" id="join_date" name="join_date" value="{{ current_date }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-info-circle me-2"></i>Status Kepegawaian
+                                    </label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="employment_status" id="pns" value="PNS" checked>
+                                            <label class="form-check-label" for="pns">PNS</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="employment_status" id="honorer" value="Honorer">
+                                            <label class="form-check-label" for="honorer">Honorer</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="employment_status" id="kontrak" value="Kontrak">
+                                            <label class="form-check-label" for="kontrak">Kontrak</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="experience" class="form-label">
+                                        <i class="fas fa-clock me-2"></i>Pengalaman Mengajar (Tahun)
+                                    </label>
+                                    <input type="number" class="form-control" id="experience" name="experience" min="0" max="50" placeholder="Contoh: 5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fas fa-undo me-2"></i>Reset Form
+                            </button>
+                            <div>
+                                <a href="{{ url_for('teachers') }}" class="btn btn-outline-secondary me-2">
+                                    <i class="fas fa-times me-2"></i>Batal
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>Simpan Data
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Card -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card" id="previewCard" style="display: none;">
+                <div class="card-header bg-success text-white">
+                    <h6 class="m-0">
+                        <i class="fas fa-eye me-2"></i>Preview Data Guru
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="avatar-xl bg-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                                <i class="fas fa-user-tie fa-3x text-white"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="150"><strong>NIP:</strong></td>
+                                    <td id="preview-nip">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nama:</strong></td>
+                                    <td id="preview-name">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td id="preview-email">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Telepon:</strong></td>
+                                    <td id="preview-phone">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mata Pelajaran:</strong></td>
+                                    <td id="preview-subject">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td id="preview-status">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Alamat:</strong></td>
+                                    <td id="preview-address">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Set current date
+    document.getElementById('join_date').value = new Date().toISOString().split('T')[0];
+
+    // Form validation and preview
+    const form = document.getElementById('addTeacherForm');
+    const previewCard = document.getElementById('previewCard');
+    
+    // Real-time preview
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    
+    function updatePreview() {
+        const formData = new FormData(form);
+        const hasData = formData.get('nip') || formData.get('name') || formData.get('email');
+        
+        if (hasData) {
+            previewCard.style.display = 'block';
+            document.getElementById('preview-nip').textContent = formData.get('nip') || '-';
+            document.getElementById('preview-name').textContent = formData.get('name') || '-';
+            document.getElementById('preview-email').textContent = formData.get('email') || '-';
+            document.getElementById('preview-phone').textContent = formData.get('phone') || '-';
+            document.getElementById('preview-subject').textContent = formData.get('subject') || '-';
+            document.getElementById('preview-status').textContent = formData.get('employment_status') || '-';
+            document.getElementById('preview-address').textContent = formData.get('address') || '-';
+        } else {
+            previewCard.style.display = 'none';
+        }
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const nip = document.getElementById('nip').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        
+        if (!nip || !name || !email || !subject) {
+            showAlert('Mohon lengkapi semua field yang wajib diisi!', 'danger');
+            return;
+        }
+        
+        // Validate NIP format
+        if (!/^\d{18}$/.test(nip)) {
+            showAlert('NIP harus berupa 18 digit angka!', 'danger');
+            return;
+        }
+        
+        // Show loading
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+        submitBtn.disabled = true;
+        
+        // Submit form
+        setTimeout(() => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            // Show success message and redirect
+            showAlert('Data guru berhasil disimpan!', 'success');
+            setTimeout(() => {
+                window.location.href = "{{ url_for('teachers') }}";
+            }, 1500);
+        }, 2000);
+    });
+
+    function resetForm() {
+        if (confirm('Apakah Anda yakin ingin mengosongkan form?')) {
+            form.reset();
+            document.getElementById('join_date').value = new Date().toISOString().split('T')[0];
+            previewCard.style.display = 'none';
+        }
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.container');
+        container.insertBefore(alertDiv, container.firstChild);
+        
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Auto format NIP input
+    document.getElementById('nip').addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 18);
+    });
+
+    // Auto format phone input
+    document.getElementById('phone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 15);
+    });
+</script>
+
+<style>
+    .avatar-xl {
+        width: 5rem;
+        height: 5rem;
+        font-size: 2rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--success-color);
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
