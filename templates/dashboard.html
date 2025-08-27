@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SIAKAD{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </h1>
+                <div class="text-muted">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stats-card slide-up">
+                <div class="stats-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stats-number" id="totalStudents">0</div>
+                <div class="stats-label">Total Siswa</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stats-card slide-up" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                <div class="stats-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="stats-number" id="totalTeachers">0</div>
+                <div class="stats-label">Total Guru</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stats-card slide-up" style="background: linear-gradient(135deg, #ffc107, #fd7e14);">
+                <div class="stats-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stats-number" id="totalClasses">0</div>
+                <div class="stats-label">Total Kelas</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stats-card slide-up" style="background: linear-gradient(135deg, #dc3545, #e83e8c);">
+                <div class="stats-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="stats-number" id="totalSubjects">0</div>
+                <div class="stats-label">Total Mata Pelajaran</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Recent Activity -->
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="chart-container fade-in">
+                <h5 class="mb-3">
+                    <i class="fas fa-chart-bar me-2"></i>Statistik Siswa per Kelas
+                </h5>
+                <canvas id="studentsChart" height="100"></canvas>
+            </div>
+        </div>
+        
+        <div class="col-xl-4 col-lg-5">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h6 class="m-0">
+                        <i class="fas fa-clock me-2"></i>Aktivitas Terbaru
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Siswa Baru Ditambahkan</h6>
+                                <p class="timeline-text">Ahmad Pratama telah didaftarkan ke kelas X-A</p>
+                                <small class="text-muted">2 jam yang lalu</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Guru Baru Ditambahkan</h6>
+                                <p class="timeline-text">Dr. Siti Nurhaliza bergabung sebagai guru Matematika</p>
+                                <small class="text-muted">5 jam yang lalu</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-warning"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Kelas Baru Dibuat</h6>
+                                <p class="timeline-text">Kelas XI-B telah dibuat untuk tahun ajaran 2024/2025</p>
+                                <small class="text-muted">1 hari yang lalu</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h6 class="m-0">
+                        <i class="fas fa-bolt me-2"></i>Aksi Cepat
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('add_student') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i>Tambah Siswa
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('add_teacher') }}" class="btn btn-success w-100">
+                                <i class="fas fa-user-tie me-2"></i>Tambah Guru
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-warning w-100">
+                                <i class="fas fa-plus me-2"></i>Buat Kelas
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-info w-100">
+                                <i class="fas fa-file-alt me-2"></i>Laporan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Load statistics
+    function loadStats() {
+        fetch('/api/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalStudents').textContent = data.total_students;
+                document.getElementById('totalTeachers').textContent = data.total_teachers;
+                document.getElementById('totalClasses').textContent = data.total_classes;
+                document.getElementById('totalSubjects').textContent = data.total_subjects;
+            })
+            .catch(error => {
+                console.error('Error loading stats:', error);
+            });
+    }
+
+    // Initialize chart
+    function initChart() {
+        const ctx = document.getElementById('studentsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['X-A', 'X-B', 'XI-A', 'XI-B', 'XII-A', 'XII-B'],
+                datasets: [{
+                    label: 'Jumlah Siswa',
+                    data: [32, 28, 30, 25, 27, 24],
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.8)',
+                        'rgba(25, 135, 84, 0.8)',
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(220, 53, 69, 0.8)',
+                        'rgba(13, 202, 240, 0.8)',
+                        'rgba(111, 66, 193, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(13, 110, 253, 1)',
+                        'rgba(25, 135, 84, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(13, 202, 240, 1)',
+                        'rgba(111, 66, 193, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Set current date
+    function setCurrentDate() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', options);
+    }
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStats();
+        initChart();
+        setCurrentDate();
+    });
+</script>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1.4rem;
+        top: 0.5rem;
+        bottom: -1.5rem;
+        width: 2px;
+        background-color: #e9ecef;
+    }
+
+    .timeline-item:last-child::before {
+        display: none;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: -1.75rem;
+        top: 0.25rem;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        border: 2px solid white;
+        z-index: 1;
+    }
+
+    .timeline-content {
+        padding-left: 0.5rem;
+    }
+
+    .timeline-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .timeline-text {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+</style>
+{% endblock %}

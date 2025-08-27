@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Data Guru - SIAKAD{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Data Guru
+                </h1>
+                <a href="{{ url_for('add_teacher') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Tambah Guru
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="searchInput" class="form-label">Cari Guru</label>
+                                <input type="text" class="form-control" id="searchInput" placeholder="Cari berdasarkan nama atau NIP...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="subjectFilter" class="form-label">Filter Mata Pelajaran</label>
+                                <select class="form-select" id="subjectFilter">
+                                    <option value="">Semua Mata Pelajaran</option>
+                                    <option value="Matematika">Matematika</option>
+                                    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                    <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                    <option value="IPA">IPA</option>
+                                    <option value="IPS">IPS</option>
+                                    <option value="Seni Budaya">Seni Budaya</option>
+                                    <option value="Pendidikan Jasmani">Pendidikan Jasmani</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div>
+                                    <button class="btn btn-secondary w-100" onclick="resetFilters()">
+                                        <i class="fas fa-undo me-2"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="m-0">
+                        <i class="fas fa-list me-2"></i>Daftar Guru
+                        <span class="badge bg-success ms-2" id="teacherCount">{{ teachers|length }}</span>
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="teachersTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>NIP</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Email</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Telepon</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in teachers %}
+                                <tr data-name="{{ teacher.name|lower }}" data-nip="{{ teacher.nip }}" data-subject="{{ teacher.subject }}">
+                                    <td>{{ loop.index }}</td>
+                                    <td>
+                                        <span class="badge bg-success">{{ teacher.nip }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-success rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                <i class="fas fa-user-tie text-white"></i>
+                                            </div>
+                                            <div>
+                                                <strong>{{ teacher.name }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ teacher.subject or 'Mata Pelajaran Belum Ditentukan' }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ teacher.email }}</td>
+                                    <td>
+                                        {% if teacher.subject %}
+                                            <span class="badge bg-primary">{{ teacher.subject }}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Belum Ditentukan</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ teacher.phone or '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>Aktif
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewTeacher({{ teacher.id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="editTeacher({{ teacher.id }})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteTeacher({{ teacher.id }})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                        {% if not teachers %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Belum Ada Data Guru</h5>
+                            <p class="text-muted">Klik tombol "Tambah Guru" untuk menambah data guru baru.</p>
+                            <a href="{{ url_for('add_teacher') }}" class="btn btn-success">
+                                <i class="fas fa-plus me-2"></i>Tambah Guru Pertama
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Teacher Detail Modal -->
+<div class="modal fade" id="teacherModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-tie me-2"></i>Detail Guru
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="teacherModalBody">
+                <!-- Teacher details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Search and filter functionality
+    document.getElementById('searchInput').addEventListener('input', filterTable);
+    document.getElementById('subjectFilter').addEventListener('change', filterTable);
+
+    function filterTable() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const subjectFilter = document.getElementById('subjectFilter').value;
+        
+        const rows = document.querySelectorAll('#teachersTable tbody tr');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const name = row.dataset.name;
+            const nip = row.dataset.nip;
+            const subject = row.dataset.subject;
+
+            const matchesSearch = name.includes(searchTerm) || nip.includes(searchTerm);
+            const matchesSubject = !subjectFilter || subject === subjectFilter;
+
+            if (matchesSearch && matchesSubject) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        document.getElementById('teacherCount').textContent = visibleCount;
+    }
+
+    function resetFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('subjectFilter').value = '';
+        filterTable();
+    }
+
+    function viewTeacher(id) {
+        const modalBody = document.getElementById('teacherModalBody');
+        modalBody.innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Memuat data guru...</p>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('teacherModal'));
+        modal.show();
+        
+        // Simulate loading data
+        setTimeout(() => {
+            modalBody.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="avatar-lg bg-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                            <i class="fas fa-user-tie fa-2x text-white"></i>
+                        </div>
+                        <h5>Dr. Siti Nurhaliza</h5>
+                        <p class="text-muted">NIP: 198501012010012001</p>
+                        <span class="badge bg-primary">Matematika</span>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>siti.nurhaliza@sekolah.ac.id</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Telepon:</strong></td>
+                                <td>08123456789</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mata Pelajaran:</strong></td>
+                                <td><span class="badge bg-primary">Matematika</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alamat:</strong></td>
+                                <td>Jl. Pendidikan No. 456, Jakarta</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status:</strong></td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bergabung:</strong></td>
+                                <td>1 Januari 2020</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="mt-3">
+                            <h6>Kelas yang Diajar:</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge bg-outline-primary">X-A</span>
+                                <span class="badge bg-outline-primary">X-B</span>
+                                <span class="badge bg-outline-primary">XI-A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }, 1000);
+    }
+
+    function editTeacher(id) {
+        alert('Fitur edit akan segera tersedia!');
+    }
+
+    function deleteTeacher(id) {
+        if (confirm('Apakah Anda yakin ingin menghapus data guru ini?')) {
+            alert('Fitur hapus akan segera tersedia!');
+        }
+    }
+</script>
+
+<style>
+    .avatar-sm {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.8rem;
+    }
+
+    .avatar-lg {
+        width: 4rem;
+        height: 4rem;
+        font-size: 1.5rem;
+    }
+
+    .table tbody tr {
+        cursor: pointer;
+    }
+
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+
+    .btn-group .btn:last-child {
+        margin-right: 0;
+    }
+
+    .bg-outline-primary {
+        background-color: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}
